@@ -1,5 +1,6 @@
 /*
  * @author: Nicholas Ranin
+ * @editor: Edward
  * @description: Tank Drive Code
  */
 
@@ -47,10 +48,10 @@ public final class TankDrive {
          * leftMotor.addFollower(leftFollowerMotor);
          * rightMotor.addFollower(rightFollowerMotor);
          */
-        leftMotor = new CANSparkMax(leftFrontID, MotorType.kBrushless);
-        leftFollower = new CANSparkMax(leftBackID, MotorType.kBrushless);
-        rightMotor = new CANSparkMax(rightFrontID, MotorType.kBrushless);
-        rightFollower = new CANSparkMax(rightBackID, MotorType.kBrushless);
+        leftMotor = new CANSparkMax(leftFrontID, MotorType.kBrushed);
+        leftFollower = new CANSparkMax(leftBackID, MotorType.kBrushed);
+        rightMotor = new CANSparkMax(rightFrontID, MotorType.kBrushed);
+        rightFollower = new CANSparkMax(rightBackID, MotorType.kBrushed);
         // Pair motors with their siblings //
         leftFollower.follow(leftMotor);
         rightFollower.follow(rightMotor);
@@ -69,10 +70,13 @@ public final class TankDrive {
         // Calculations //
         speedMultiplier = controller.getRightBumperPressed() ? speedMultiplier * -1 : speedMultiplier;
         creepMultiplier = controller.getRightTriggerAxis() > .5 ? creepSpeed : baseSpeed;
+        // Controller //
+        double leftControllerY = controller.getLeftY() * creepMultiplier * speedMultiplier;
+        double rightControllerX = controller.getRightX() * creepMultiplier;
         // Motor Speed //
-        double leftSpeed = controller.getLeftY() * speedMultiplier * creepMultiplier; // Left Motor //
-        double rightSpeed = controller.getRightY() * speedMultiplier * creepMultiplier; // Right Motor //
+        double leftMotorSpeed = (leftControllerY + rightControllerX); // Left Motor //
+        double rightMotorSpeed = -(leftControllerY - rightControllerX); // Right Motor //
         // Tank Drive //
-        differentialDrive.tankDrive(leftSpeed, rightSpeed);
+        differentialDrive.tankDrive(leftMotorSpeed, rightMotorSpeed);
     }
 }
