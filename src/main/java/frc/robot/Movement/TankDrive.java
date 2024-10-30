@@ -15,18 +15,18 @@ import com.revrobotics.CANSparkLowLevel.MotorType;
 
 import static frc.robot.Constants.DriveSettings.*;
 // Base Class //
-public final class TankDrive {
+public class TankDrive {
     // Properties //
-    private static DifferentialDrive differentialDrive;
-    private static XboxController controller;
+    private DifferentialDrive differentialDrive;
+    private XboxController controller;
     // Motor Pins //
-    private static final int leftFrontID = 1;
-    private static final int leftBackID = 2;
+    private final int leftFrontID = 1;
+    private final int leftBackID = 2;
 
-    private static final int rightFrontID = 3;
-    private static final int rightBackID = 4;
+    private final int rightFrontID = 3;
+    private final int rightBackID = 4;
     // Motor Objects //
-    private static CANSparkMax leftMotor, leftFollower, rightMotor, rightFollower;
+    private CANSparkMax leftMotor, leftFollower, rightMotor, rightFollower;
     // Initialize //
     /**
      * Call once to set up Tank Drive
@@ -34,10 +34,10 @@ public final class TankDrive {
      * Name: initialize
      * Frequency: Once
      */
-    public static void initialize()
+    public void initialize()
     {
         // Initialize Controller // 
-        controller = new XboxController(0);
+        controller = new XboxController(0); // Setup the controller port in driver station
         // Initialize Motors //
         /*
          * PWM Version:
@@ -48,7 +48,7 @@ public final class TankDrive {
          * leftMotor.addFollower(leftFollowerMotor);
          * rightMotor.addFollower(rightFollowerMotor);
          */
-        leftMotor = new CANSparkMax(leftFrontID, MotorType.kBrushed);
+        leftMotor = new CANSparkMax(leftFrontID, MotorType.kBrushed); // CIM motors are brushed, neo motors are brushless.
         leftFollower = new CANSparkMax(leftBackID, MotorType.kBrushed);
         rightMotor = new CANSparkMax(rightFrontID, MotorType.kBrushed);
         rightFollower = new CANSparkMax(rightBackID, MotorType.kBrushed);
@@ -56,7 +56,7 @@ public final class TankDrive {
         leftFollower.follow(leftMotor);
         rightFollower.follow(rightMotor);
         // Tank Drive //
-        differentialDrive = new DifferentialDrive(leftMotor, rightMotor);
+        differentialDrive = new DifferentialDrive(leftMotor, rightMotor); // Create a Differential drive object
     }
     // Update //
     /**
@@ -65,18 +65,18 @@ public final class TankDrive {
      * Name: updateDrive
      * Frequency: Every-Frame
      */ 
-    public static void updateDrive()
+    public void updateDrive()
     {
         // Calculations //
-        speedMultiplier = controller.getRightBumperPressed() ? speedMultiplier * -1 : speedMultiplier;
-        creepMultiplier = controller.getRightTriggerAxis() > .5 ? creepSpeed : baseSpeed;
+        speedMultiplier = controller.getRightBumperPressed() ? speedMultiplier * -1 : speedMultiplier; // Flip drive
+        creepMultiplier = controller.getRightTriggerAxis() > .5 ? creepSpeed : baseSpeed; // Creep drive
         // Controller //
-        double leftControllerY = controller.getLeftY() * creepMultiplier * speedMultiplier;
-        double rightControllerX = controller.getRightX() * creepMultiplier;
+        double leftControllerY = controller.getLeftY() * creepMultiplier * speedMultiplier; // Y controller values
+        double rightControllerX = controller.getRightX() * creepMultiplier; // X controller values
         // Motor Speed //
         double leftMotorSpeed = (leftControllerY + rightControllerX); // Left Motor //
         double rightMotorSpeed = -(leftControllerY - rightControllerX); // Right Motor //
         // Tank Drive //
-        differentialDrive.tankDrive(leftMotorSpeed, rightMotorSpeed);
+        differentialDrive.tankDrive(leftMotorSpeed, rightMotorSpeed); // Send code to the motors with the Tank Drive method
     }
 }

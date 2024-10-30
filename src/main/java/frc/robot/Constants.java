@@ -44,10 +44,10 @@ public final class Constants
      * E.G: With Regular Import: Constants.DriveSettings.creepMultiplier
      * E.G: With Static Import: creepMultiplier
      */
-    public final class DriveSettings // SubClass of Constants //
+    public class DriveSettings // SubClass of Constants //
     {
-        public static final double baseSpeed = .7;
-        public static final double creepSpeed = .5;
+        public static final double baseSpeed = 0.7;
+        public static final double creepSpeed = 0.5;
         
         public static double speedMultiplier = 1;
         public static double creepMultiplier = 1;

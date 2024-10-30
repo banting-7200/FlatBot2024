@@ -25,13 +25,14 @@ public class Robot extends TimedRobot {
    * This function is run when the robot is first started up and should be used for any
    * initialization code.
    */
+  TankDrive tankDrive = new TankDrive();
   @Override
   public void robotInit() {
     m_chooser.setDefaultOption("Default Auto", kDefaultAuto);
     m_chooser.addOption("My Auto", kCustomAuto);
     SmartDashboard.putData("Auto choices", m_chooser);
 
-    TankDrive.initialize();
+    tankDrive.initialize();
   }
 
   /**
@@ -85,7 +86,7 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() 
   {
-    TankDrive.updateDrive();
+    tankDrive.updateDrive();
   }
 
   /** This function is called once when the robot is disabled. */
