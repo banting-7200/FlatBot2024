@@ -10,6 +10,7 @@ package frc.robot.Movement;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 
+import edu.wpi.first.wpilibj.motorcontrol.PWMSparkMax;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
@@ -26,7 +27,7 @@ public class TankDrive {
     private final int rightFrontID = 3;
     private final int rightBackID = 4;
     // Motor Objects //
-    private CANSparkMax leftMotor, leftFollower, rightMotor, rightFollower;
+    private PWMSparkMax leftMotor, leftFollower, rightMotor, rightFollower;
     // Initialize //
     /**
      * Call once to set up Tank Drive
@@ -39,22 +40,14 @@ public class TankDrive {
         // Initialize Controller // 
         controller = new XboxController(0); // Setup the controller port in driver station
         // Initialize Motors //
-        /*
-         * PWM Version:
-         * PWMSparkMax leftMotor = new PWMSparkMax(0);
-         * PWMSparkMax leftFollowerMotor = new PWMSparkMax(1);
-         * PWMSparkMax leftFollowerMotor = new PWMSparkMax(2);
-         * PWMSparkMax leftFollowerMotor = new PWMSparkMax(3);
-         * leftMotor.addFollower(leftFollowerMotor);
-         * rightMotor.addFollower(rightFollowerMotor);
-         */
-        leftMotor = new CANSparkMax(leftFrontID, MotorType.kBrushed); // CIM motors are brushed, neo motors are brushless.
-        leftFollower = new CANSparkMax(leftBackID, MotorType.kBrushed);
-        rightMotor = new CANSparkMax(rightFrontID, MotorType.kBrushed);
-        rightFollower = new CANSparkMax(rightBackID, MotorType.kBrushed);
+        // PWM Version:
+        leftMotor = new PWMSparkMax(leftFrontID);
+        leftFollower = new PWMSparkMax(leftBackID);
+        rightMotor = new PWMSparkMax(rightFrontID);
+        rightFollower = new PWMSparkMax(rightBackID);
         // Pair motors with their siblings //
-        leftFollower.follow(leftMotor);
-        rightFollower.follow(rightMotor);
+        leftMotor.addFollower(leftFollower);
+        rightMotor.addFollower(rightFollower);
         // Tank Drive //
         differentialDrive = new DifferentialDrive(leftMotor, rightMotor); // Create a Differential drive object
     }
