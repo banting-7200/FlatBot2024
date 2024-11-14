@@ -21,11 +21,11 @@ public class TankDrive {
     private DifferentialDrive differentialDrive;
     private XboxController controller;
     // Motor Pins //
-    private final int leftFrontID = 1;
-    private final int leftBackID = 2;
+    private final int leftFrontID = 0;
+    private final int leftBackID = 1;
 
-    private final int rightFrontID = 3;
-    private final int rightBackID = 4;
+    private final int rightFrontID = 2;
+    private final int rightBackID = 3;
     // Motor Objects //
     private PWMSparkMax leftMotor, leftFollower, rightMotor, rightFollower;
     // Initialize //

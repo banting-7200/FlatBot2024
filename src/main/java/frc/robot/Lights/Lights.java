@@ -38,12 +38,12 @@ public class Lights
         }
     }
     
-    public void inPattern(Color[] lightPattern)
+    public void inPattern(Color[] lightPattern, int x)
     {
         // Example: Color[] lightPattern = {Color.kRed, Color.kGreen, Color.kWhite};
 
         for (int i = 0; i < LEDBuffer.getLength(); i++)
-            LEDBuffer.setLED(i, lightPattern[i % lightPattern.length]);
+            LEDBuffer.setLED(i, lightPattern[(x+i) % lightPattern.length]);
     }
 
     public void rainbow() {

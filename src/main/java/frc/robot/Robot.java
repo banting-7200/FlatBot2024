@@ -25,7 +25,7 @@ public class Robot extends TimedRobot {
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
   private XboxController controller = new XboxController(0);
   private Lights lightSystem = new Lights(Constants.Lights.port, Constants.Lights.length) ;
-  private Patterns patternSystem = new Patterns(lightSystem);
+  public Patterns patternSystem = new Patterns(lightSystem);
 
   // Base Methods //
   /**
@@ -94,8 +94,10 @@ public class Robot extends TimedRobot {
   public void teleopPeriodic() 
   {
     tankDrive.updateDrive();
-    if(controller.getXButtonPressed())
+    if(controller.getXButtonReleased())
       patternSystem.cycleEffect();
+    patternSystem.patternPeriodic();
+
   }
 
   /** This function is called once when the robot is disabled. */
