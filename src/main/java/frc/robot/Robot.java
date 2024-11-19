@@ -7,7 +7,9 @@ package frc.robot;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.Movement.TankDrive;
+import static frc.robot.Constants.MotorSettings.*;
+import frc.robot.Movement.TankDriveCAN;
+import frc.robot.Movement.TankDrivePWM;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -25,14 +27,26 @@ public class Robot extends TimedRobot {
    * This function is run when the robot is first started up and should be used for any
    * initialization code.
    */
-  TankDrive tankDrive = new TankDrive();
+  TankDriveCAN tankDriveCAN;
+  TankDrivePWM tankDrivePWM;
+
   @Override
   public void robotInit() {
     m_chooser.setDefaultOption("Default Auto", kDefaultAuto);
     m_chooser.addOption("My Auto", kCustomAuto);
     SmartDashboard.putData("Auto choices", m_chooser);
 
-    tankDrive.initialize();
+    if (isMotorTypePWM)
+    {
+      tankDrivePWM = new TankDrivePWM();
+      tankDrivePWM.initialize();
+    }
+    
+    else
+    {
+     tankDriveCAN = new TankDriveCAN();
+     tankDriveCAN.initialize();
+    }
   }
 
   /**
@@ -86,7 +100,10 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() 
   {
-    tankDrive.updateDrive();
+    if (isMotorTypePWM)
+      tankDrivePWM.updateDrive();
+    else
+      tankDriveCAN.updateDrive();
   }
 
   /** This function is called once when the robot is disabled. */
