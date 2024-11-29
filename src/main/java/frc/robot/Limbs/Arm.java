@@ -11,6 +11,7 @@ import frc.robot.Controller;
 // Main Class //
 public final class Arm 
 {
+    public static double inputAxis = 0;
     //initializes motors
     public static PWMSparkMax mainBallLauncher = new PWMSparkMax(5);
     public static PWMSparkMax followerBallLauncher = new PWMSparkMax(6);
@@ -22,6 +23,7 @@ public final class Arm
     {
         mainBallLauncher.addFollower(followerBallLauncher);
         mainBallLauncher.setInverted(true);
+        followerBallLauncher.setInverted(true);
         // Init Controller //
         if (isJoystick)
             controller = new Controller(new Joystick(0));
@@ -31,12 +33,16 @@ public final class Arm
     // Base Methods //
     public static void updateArticulate()
     {
-        double inputAxis = 0;
+        
         // Controls //
-        if (controller.turretArticulateDown())
-            inputAxis -= 0.1;
-        if (controller.turretArticulateUp())
-            inputAxis += 0.1;
+        if (controller.turretArticulateDown()){
+            inputAxis = -0.1;
+        } else if(controller.turretArticulateUp()){
+            inputAxis = 0.35;
+        } else{
+            inputAxis = 0;
+        }
+               
         // Update Motors //
         articulateMotor.set(inputAxis);
     }
