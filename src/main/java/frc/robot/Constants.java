@@ -57,6 +57,6 @@ public final class Constants
 
     public final class MotorSettings
     {
-        public static final boolean isMotorTypePWM = false; //determines which motor controller should be used
+        public static final boolean isMotorTypePWM = true; //determines which motor controller should be used
     }
 }

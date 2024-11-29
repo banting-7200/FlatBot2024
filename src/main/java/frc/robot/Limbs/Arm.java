@@ -1,24 +1,56 @@
+// Address //
 package frc.robot.Limbs;
+// Imports //
+import static frc.robot.Constants.DriveSettings.isJoystick;
 
+import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.motorcontrol.PWMSparkMax;
+import edu.wpi.first.wpilibj.Joystick;
+import frc.robot.Controller;
+// Data //
+// Main Class //
 public final class Arm 
 {
- 
-}
-
-/*
- * @description: 
- */
-final class ShootHandler extends Thread
-{
-    // Constructor //
-    public ShootHandler()
+    //initializes motors
+    public static PWMSparkMax mainBallLauncher = new PWMSparkMax(5);
+    public static PWMSparkMax followerBallLauncher = new PWMSparkMax(6);
+    public static PWMSparkMax articulateMotor = new PWMSparkMax(4);
+    // Input //
+    public static Controller controller;
+    // Initialize Method //
+    public static void initialize()
     {
-        this.start();
+        mainBallLauncher.addFollower(followerBallLauncher);
+        mainBallLauncher.setInverted(true);
+        // Init Controller //
+        if (isJoystick)
+            controller = new Controller(new Joystick(0));
+        else
+            controller = new Controller(new XboxController(0));
     }
-    // Update Function //
-    @Override
-    public void run()
+    // Base Methods //
+    public static void updateArticulate()
     {
-
+        double inputAxis = 0;
+        // Controls //
+        if (controller.turretArticulateDown())
+            inputAxis -= 0.1;
+        if (controller.turretArticulateUp())
+            inputAxis += 0.1;
+        // Update Motors //
+        articulateMotor.set(inputAxis);
+    }
+    // Update Method //
+    public static void update()
+    {
+        updateArticulate();
+        // Conditions //
+        if (!controller.isShootDown())
+        {
+            mainBallLauncher.set(0);
+            return;
+        }
+        // Settings //
+        mainBallLauncher.set(1);
     }
 }

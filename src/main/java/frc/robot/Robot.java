@@ -8,6 +8,8 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import static frc.robot.Constants.MotorSettings.*;
+
+import frc.robot.Limbs.Arm;
 import frc.robot.Movement.TankDriveCAN;
 import frc.robot.Movement.TankDrivePWM;
 
@@ -47,6 +49,8 @@ public class Robot extends TimedRobot {
      tankDriveCAN = new TankDriveCAN();
      tankDriveCAN.initialize();
     }
+
+    Arm.initialize();
   }
 
   /**
@@ -104,6 +108,8 @@ public class Robot extends TimedRobot {
       tankDrivePWM.updateDrive();
     else
       tankDriveCAN.updateDrive();
+
+    Arm.update();
   }
 
   /** This function is called once when the robot is disabled. */
