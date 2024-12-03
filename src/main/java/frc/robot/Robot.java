@@ -4,7 +4,12 @@
 
 package frc.robot;
 
+import edu.wpi.first.math.VecBuilder;
+import edu.wpi.first.math.system.plant.DCMotor;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.simulation.DifferentialDrivetrainSim;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import static frc.robot.Constants.MotorSettings.*;
@@ -12,6 +17,7 @@ import static frc.robot.Constants.MotorSettings.*;
 import frc.robot.Limbs.Arm;
 import frc.robot.Movement.TankDriveCAN;
 import frc.robot.Movement.TankDrivePWM;
+import frc.robot.Movement.TankDrivePWMExperimental;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -20,10 +26,14 @@ import frc.robot.Movement.TankDrivePWM;
  * project.
  */
 public class Robot extends TimedRobot {
+  // Data //
   private static final String kDefaultAuto = "Default";
   private static final String kCustomAuto = "My Auto";
   private String m_autoSelected;
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
+  // Simulation Data //
+  private DifferentialDrivetrainSim m_driveSim;
+  private Field2d m_field = new Field2d();
   // Base Methods //
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -35,9 +45,7 @@ public class Robot extends TimedRobot {
   @Override
   public void robotInit() {
     m_chooser.setDefaultOption("Default Auto", kDefaultAuto);
-    m_chooser.addOption("My Auto", kCustomAuto);
-    SmartDashboard.putData("Auto choices", m_chooser);
-
+    
     if (isMotorTypePWM)
     {
       tankDrivePWM = new TankDrivePWM();
@@ -96,9 +104,7 @@ public class Robot extends TimedRobot {
 
   /** This function is called once when teleop is enabled. */
   @Override
-  public void teleopInit() 
-  {
-  }
+  public void teleopInit() {}
 
   /** This function is called periodically during operator control. */
   @Override
@@ -130,9 +136,34 @@ public class Robot extends TimedRobot {
 
   /** This function is called once when the robot is first started up. */
   @Override
-  public void simulationInit() {}
+  public void simulationInit() 
+  {
+    SmartDashboard.putData("Field", m_field);
+    SmartDashboard.putNumber("Vertical", TankDrivePWM.xBoxController.getLeftY());
+    SmartDashboard.putNumber("Horizontal", TankDrivePWM.xBoxController.getRightX());
+    // Create the simulation model of our drivetrain.
+    m_driveSim = new DifferentialDrivetrainSim(
+      DCMotor.getNEO(2),       // 2 NEO motors on each side of the drivetrain.
+      7.29,                    // 7.29:1 gearing reduction.
+      7.5,                     // MOI of 7.5 kg m^2 (from CAD model).
+      60.0,                    // The mass of the robot is 60 kg.
+      Units.inchesToMeters(3), // The robot uses 3" radius wheels.
+      0.7112,                  // The track width is 0.7112 meters.
+
+      // The standard deviations for measurement noise:
+      // x and y:          0.001 m
+      // heading:          0.001 rad
+      // l and r velocity: 0.1   m/s
+      // l and r position: 0.005 m
+      VecBuilder.fill(0.001, 0.001, 0.001, 0.1, 0.1, 0.005, 0.005)
+    );
+  }
 
   /** This function is called periodically whilst in simulation. */
   @Override
-  public void simulationPeriodic() {}
+  public void simulationPeriodic() 
+  {
+    m_driveSim.update(0.02);
+    tankDrivePWM.updateDrive();
+  }
 }

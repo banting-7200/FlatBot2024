@@ -63,7 +63,6 @@ public class TankDriveCAN {
      */ 
     public void updateDrive()
     {
-
         if (isJoystick)
         {
             /// Joystick Version /// 

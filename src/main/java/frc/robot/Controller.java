@@ -284,4 +284,8 @@ public class Controller
             return 0d;
         }
     }
+<<<<<<< Updated upstream
 }
+=======
+}
+>>>>>>> Stashed changes

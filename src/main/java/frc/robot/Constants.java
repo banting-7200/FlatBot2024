@@ -126,4 +126,8 @@ public final class Constants
             }}
         );
     }};
+<<<<<<< Updated upstream
 }
+=======
+}
+>>>>>>> Stashed changes
