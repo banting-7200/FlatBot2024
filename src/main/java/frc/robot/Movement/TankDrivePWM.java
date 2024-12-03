@@ -56,8 +56,8 @@ public class TankDrivePWM {
         double leftControllerY = controller.getAxis("Vertical") * creepMultiplier * speedMultiplier; // Y controller values
         double rightControllerX = controller.getAxis("Horizontal") * creepMultiplier;  // X controller values 
         // Motor Speed //
-        double leftMotorSpeed = (leftControllerY - rightControllerX); // Left Motor // -1 | 1
-        double rightMotorSpeed = (leftControllerY + rightControllerX); // Right Motor //
+        double leftMotorSpeed = (leftControllerY + rightControllerX); // Left Motor //
+        double rightMotorSpeed = -(leftControllerY - rightControllerX); // Right Motor //
         // Tank Drive //
         differentialDrive.tankDrive(leftMotorSpeed, rightMotorSpeed); // Send code to the motors with the Tank Drive method
     }

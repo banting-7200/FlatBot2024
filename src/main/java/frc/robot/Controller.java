@@ -29,7 +29,7 @@ public class Controller
         // Create Actual Controller //
         try 
         {
-            Constructor<?> constructor = controller.getDeclaredConstructor();
+            Constructor<?> constructor = controller.getConstructor(Integer.TYPE);
             this.actualController = constructor.newInstance(0);
         }
 
@@ -49,7 +49,7 @@ public class Controller
         // Create Actual Controller //
         try 
         {
-            Constructor<?> constructor = controller.getDeclaredConstructor();
+            Constructor<?> constructor = controller.getConstructor(Integer.TYPE);
             this.actualController = constructor.newInstance(0);
         }
 
@@ -67,7 +67,7 @@ public class Controller
         var inputMap = InputMaps.get(controller);
         // Data Storage //
         String[] actionNames = new String[inputMap.size()];
-        String[] methodNames = new String[inputMap.size()];
+        String[][] methodNames = new String[inputMap.size()][3];
         // Iterate //
         int actionIndex = 0;
         for (Enumeration<String> actionEnum = inputMap.keys(); actionEnum.hasMoreElements(); actionIndex++)
@@ -79,22 +79,23 @@ public class Controller
         }
 
         actionIndex = 0;
-        for (Enumeration<String> actionEnum = inputMap.elements(); actionEnum.hasMoreElements(); actionIndex++)
+        for (Enumeration<String[]> actionEnum = inputMap.elements(); actionEnum.hasMoreElements(); actionIndex++)
         {
             // Extract Element //
-            String methodName = actionEnum.nextElement();
+            String[] methodName = actionEnum.nextElement();
             // Store Element //
             methodNames[actionIndex] = methodName;
         }
-        // 
+        // Saves Actions //
         for (int i = 0; i < inputMap.size(); i++)
         {
             // Arrays //
-            String[] methodNameData = methodNames[i].split("|");
+            String[] methodData = methodNames[i];
             // Name Data //
             String actionName = actionNames[i];
-            String methodName = methodNameData[0];
-            String resultType = methodNameData[1];
+            String methodName = methodData[0];
+            String resultType = methodData[1];
+            String parameterType = methodData.length > 2 ? methodData[2] : null;
             // Method Data //
             Method actionMethod;
             // Extract Method //
@@ -114,8 +115,8 @@ public class Controller
             actionDict.put(actionName, actionMethod);
             resultTypes.put(actionMethod, resultType.toLowerCase());
             // Store Parameters //
-            if (methodNameData.length > 2)
-                methodParameters.put(actionMethod, Integer.valueOf(methodNameData[3]));
+            if (parameterType != null)
+                methodParameters.put(actionMethod, Integer.valueOf(parameterType));
         }
     }
     
@@ -181,7 +182,7 @@ public class Controller
         catch (IllegalAccessException exception)
         {
             // Warn //
-            System.out.println("Attempteed unauthorized access for action: " + actionName);
+            System.out.println("Attempted unauthorized access for action: " + actionName);
             // Fail //
             return false;
         }
@@ -202,6 +203,7 @@ public class Controller
         else
         {
             // Fail //
+            System.out.println("Invalid Result Type: " + resultType);
             System.out.println("Failed to attempt to extract boolean from action: " + actionName);
             return false;
         }
@@ -216,12 +218,12 @@ public class Controller
     {
         // Data //
         Method actionMethod = actionDict.get(actionName);
-        String resultType = resultTypes.get(actionMethod);
-        double result;
+        String resultType = resultTypes.get(actionMethod).toLowerCase();
+        Object result;
         // Extract Result //
         try
         {
-            result = (double)actionMethod.invoke(this);
+            result = actionMethod.invoke(ControllerClass.cast(actualController));
         }
         // Exceptions //
         catch (IllegalArgumentException exception)
@@ -248,33 +250,43 @@ public class Controller
             // Fail //
             return 0d;
         }
+
+        catch (ClassCastException exception)
+        {
+            // Warn //
+            System.out.println("Error when converting classes for action: " + actionName);
+            // Fail //
+            return 0d;
+        }
         // Attempt Return //
         if (resultType == "double")
         {
             // Success //
-            return result;
+            return (double)result;
         }
 
         else if (resultType == "xpov")
         {
+            int newResult = (int)result;
             // Success //
-            if (result == 0 || result == 180)
+            if (newResult == 0 || newResult == 180)
                 return 0;
-            else if (result <= 315 && result > 180)
-                return result == 270 ? -1 : -.5;
+            else if (newResult <= 315 && newResult > 180)
+                return newResult == 270 ? -1 : -.5;
             else
-                return result == 90 ? 1 : .5;
+                return newResult == 90 ? 1 : .5;
         }
 
         else if (resultType == "ypov")
         {
+            int newResult = (int)result;
             // Success //
-            if (result == 90 || result == 270)
+            if (newResult == 90 || newResult == 270)
                 return 0;
-            else if (result >= 135 && result <= 225)
-                return result == 180 ? -1 : -.5;
+            else if (newResult >= 135 && newResult <= 225)
+                return newResult == 180 ? -1 : -.5;
             else
-                return result == 0 ? 1 : .5;
+                return newResult == 0 ? 1 : .5;
         }
 
         else
@@ -284,8 +296,4 @@ public class Controller
             return 0d;
         }
     }
-<<<<<<< Updated upstream
 }
-=======
-}
->>>>>>> Stashed changes

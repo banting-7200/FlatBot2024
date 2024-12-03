@@ -25,19 +25,16 @@ public final class Arm
         mainBallLauncher.setInverted(true);
         followerBallLauncher.setInverted(true);
         // Init Controller //
-        if (isJoystick)
-            controller = new Controller(new Joystick(0));
-        else
-            controller = new Controller(new XboxController(0));
+        controller = Controller.getController();
     }
     // Base Methods //
     public static void updateArticulate()
     {
         
         // Controls //
-        if (controller.turretArticulateDown()){
+        if (controller.getAxis("Articulate") == 1){ // UP
             inputAxis = -0.1;
-        } else if(controller.turretArticulateUp()){
+        } else if(controller.getAxis("Articulate") == -1){ // DOWN
             inputAxis = 0.35;
         } else{
             inputAxis = 0;
@@ -51,12 +48,13 @@ public final class Arm
     {
         updateArticulate();
         // Conditions //
-        if (!controller.isShootDown())
+        if (!controller.isActionDown("Shoot"))
         {
             mainBallLauncher.set(0);
             return;
         }
         // Settings //
+        System.out.println("SHOOTING!");
         mainBallLauncher.set(1);
     }
 }

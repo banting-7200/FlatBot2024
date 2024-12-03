@@ -82,52 +82,48 @@ public final class Constants
     // Controller Type //
     public static final Class<?> ControllerClass = XboxController.class;
     // Inputs //
-    public static final Dictionary<Class<?>, Dictionary<String, String>> InputMaps = 
-    new Hashtable<Class<?>, Dictionary<String, String>>() {{
+    public static final Dictionary<Class<?>, Dictionary<String, String[]>> InputMaps = 
+    new Hashtable<Class<?>, Dictionary<String, String[]>>() {{
         put(XboxController.class, 
-            new Hashtable<String, String>() {{
+            new Hashtable<String, String[]>() {{
                 // Movement //
-                put("Horizontal", "getRightX|double");
-                put("Vertical", "getLeftY|double");
-                put("Flip", "getLeftBumper|boolean");
-                put("Creep", "getRightBumper|boolean");
+                put("Horizontal", new String[] {"getRightX", "double"});
+                put("Vertical", new String[] {"getLeftY", "double"});
+                put("Flip", new String[] {"getLeftBumper", "boolean"});
+                put("Creep", new String[] {"getRightBumper", "boolean"});
                 // Actions //
-                put("Shoot", "getRightTriggerAxis|boolean");
+                put("Shoot", new String[] {"getRightTriggerAxis", "boolean"});
                 // Turret //
-                put("Articulate", "getPOV|yPOV");
+                put("Articulate", new String[] {"getPOV", "yPOV"});
             }}
         );
 
         put(Joystick.class,
-            new Hashtable<String, String>() {{
+            new Hashtable<String, String[]>() {{
                 // Movement //
-                put("Horizontal", "getX|double");
-                put("Vertical", "getY|double");
-                put("Flip", "getRawButton|boolean|2");
-                put("Creep", "getRawButton|boolean|3");
+                put("Horizontal", new String[] {"getX", "double"});
+                put("Vertical", new String[] {"getY", "double"});
+                put("Flip", new String[] {"getRawButton", "boolean", "2"});
+                put("Creep", new String[] {"getRawButton", "boolean", "3"});
                 // Actions //
-                put("Shoot", "getTrigger|boolean");
+                put("Shoot", new String[] {"getTrigger", "boolean"});
                 // Turret //
-                put("Articulate", "getPOV|yPOV");
+                put("Articulate", new String[] {"getPOV", "yPOV"});
             }}
         );
 
         put(PS4Controller.class,
-            new Hashtable<String, String>() {{
+            new Hashtable<String, String[]>() {{
                 // Movement //
-                put("Horizontal", "getRightX|double");
-                put("Vertical", "getLeftY|double");
-                put("Flip", "getL1Button|boolean");
-                put("Creep", "getR1Button|boolean");
+                put("Horizontal", new String[] {"getRightX", "double"});
+                put("Vertical", new String[] {"getLeftY", "double"});
+                put("Flip", new String[] {"getL1Button", "boolean"});
+                put("Creep", new String[] {"getR1Button", "boolean"});
                 // Actions //
-                put("Shoot", "getR2Button|boolean");
+                put("Shoot", new String[] {"getR2Button", "boolean"});
                 // Turret //
-                put("Articulate", "getPOV|yPOV");
+                put("Articulate", new String[] {"getPOV", "yPOV"});
             }}
         );
     }};
-<<<<<<< Updated upstream
 }
-=======
-}
->>>>>>> Stashed changes
