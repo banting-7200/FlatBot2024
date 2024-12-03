@@ -17,7 +17,6 @@ import static frc.robot.Constants.MotorSettings.*;
 import frc.robot.Limbs.Arm;
 import frc.robot.Movement.TankDriveCAN;
 import frc.robot.Movement.TankDrivePWM;
-import frc.robot.Movement.TankDrivePWMExperimental;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -138,6 +137,7 @@ public class Robot extends TimedRobot {
   @Override
   public void simulationInit() 
   {
+    /*
     SmartDashboard.putData("Field", m_field);
     SmartDashboard.putNumber("Vertical", TankDrivePWM.xBoxController.getLeftY());
     SmartDashboard.putNumber("Horizontal", TankDrivePWM.xBoxController.getRightX());
@@ -157,6 +157,7 @@ public class Robot extends TimedRobot {
       // l and r position: 0.005 m
       VecBuilder.fill(0.001, 0.001, 0.001, 0.1, 0.1, 0.005, 0.005)
     );
+    */
   }
 
   /** This function is called periodically whilst in simulation. */
