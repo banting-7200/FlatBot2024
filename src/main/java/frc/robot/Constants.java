@@ -1,5 +1,14 @@
 // Address //
 package frc.robot;
+// Imports //
+import java.util.Hashtable;
+
+import java.util.Dictionary;
+import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.PS4Controller;
+import edu.wpi.first.wpilibj.motorcontrol.PWMSparkMax;
+// Credits //
 // @author: Nicholas Ranin
 // @editor: N/A
 // @description: Carries constant values, valyes cannot be altered when running.
@@ -33,6 +42,7 @@ package frc.robot;
  * Ex: float Multiplier = Constants.DriveSettings.creepMultiplier;
  */
 
+// Base Class //
 public final class Constants 
 {
     /*
@@ -57,6 +67,63 @@ public final class Constants
 
     public final class MotorSettings
     {
+        public static final Class<?> MotorClass = PWMSparkMax.class;
         public static final boolean isMotorTypePWM = true; //determines which motor controller should be used
     }
+    
+
+    public final class ShooterSettings
+    {
+        public static final int firstArmMotorPin = 4;
+        public static final double loaderMotorSpeedMultiplier = 1d;
+        public static final double shooterMotorSpeedMultiplier = 1d;
+    }
+
+    // Controller Type //
+    public static final Class<?> ControllerClass = XboxController.class;
+    // Inputs //
+    public static final Dictionary<Class<?>, Dictionary<String, String>> InputMaps = 
+    new Hashtable<Class<?>, Dictionary<String, String>>() {{
+        put(XboxController.class, 
+            new Hashtable<String, String>() {{
+                // Movement //
+                put("Horizontal", "getRightX|double");
+                put("Vertical", "getLeftY|double");
+                put("Flip", "getLeftBumper|boolean");
+                put("Creep", "getRightBumper|boolean");
+                // Actions //
+                put("Shoot", "getRightTriggerAxis|boolean");
+                // Turret //
+                put("Articulate", "getPOV|yPOV");
+            }}
+        );
+
+        put(Joystick.class,
+            new Hashtable<String, String>() {{
+                // Movement //
+                put("Horizontal", "getX|double");
+                put("Vertical", "getY|double");
+                put("Flip", "getRawButton|boolean|2");
+                put("Creep", "getRawButton|boolean|3");
+                // Actions //
+                put("Shoot", "getTrigger|boolean");
+                // Turret //
+                put("Articulate", "getPOV|yPOV");
+            }}
+        );
+
+        put(PS4Controller.class,
+            new Hashtable<String, String>() {{
+                // Movement //
+                put("Horizontal", "getRightX|double");
+                put("Vertical", "getLeftY|double");
+                put("Flip", "getL1Button|boolean");
+                put("Creep", "getR1Button|boolean");
+                // Actions //
+                put("Shoot", "getR2Button|boolean");
+                // Turret //
+                put("Articulate", "getPOV|yPOV");
+            }}
+        );
+    }};
 }
