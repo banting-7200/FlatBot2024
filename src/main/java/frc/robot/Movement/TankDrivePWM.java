@@ -7,19 +7,17 @@
 // Package //
 package frc.robot.Movement;
 // Imports //
-import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 
 import edu.wpi.first.wpilibj.motorcontrol.PWMSparkMax;
+import frc.robot.Controller;
 
 import static frc.robot.Constants.DriveSettings.*;
 // Base Class //
 public class TankDrivePWM {
     // Properties //
     private DifferentialDrive differentialDrive;
-    private final Joystick joystickController = new Joystick(0);
-    private final XboxController xBoxController = new XboxController(0); // private controller controller;
+    private final Controller controller = Controller.getController();
     // Motor Objects //
     private PWMSparkMax leftMotor, leftFollowerMotor, rightMotor, rightFollowerMotor;
     // Initialize //
@@ -50,35 +48,17 @@ public class TankDrivePWM {
      */ 
     public void updateDrive()
     {
-        if (isJoystick)
-        {
-            /// Joystick Version /// 
-            // Calculations //
-            speedMultiplier = joystickController.getRawButtonPressed(2) ? speedMultiplier * -1 : speedMultiplier; // Flip drive 
-            creepMultiplier = joystickController.getTriggerPressed() ? creepSpeed : baseSpeed; // Creep drive
-            // Controller //
-            double leftControllerY = joystickController.getY() * creepMultiplier * speedMultiplier; // Y controller values
-            double rightControllerX = joystickController.getX() * creepMultiplier;  // X controller values 
-            // Motor Speed //
-            double leftMotorSpeed = (leftControllerY - rightControllerX); // Left Motor // -1 | 1
-            double rightMotorSpeed = (leftControllerY + rightControllerX); // Right Motor //
-            // Tank Drive //
-            differentialDrive.tankDrive(leftMotorSpeed, rightMotorSpeed); // Send code to the motors with the Tank Drive method
-        }
-        else
-        {
-            /// Xbox Version ///
-            // Calculations //
-            speedMultiplier = xBoxController.getRightBumperPressed() ? speedMultiplier * -1 : speedMultiplier; // Flip drive 
-            creepMultiplier = xBoxController.getRightTriggerAxis() > .5 ? creepSpeed : baseSpeed; // Creep drive
-            // Controller //
-            double leftControllerY = xBoxController.getLeftY() * creepMultiplier * speedMultiplier; // Y controller values
-            double rightControllerX = xBoxController.getRightX() * creepMultiplier; // X controller values
-            // Motor Speed //
-            double leftMotorSpeed = (leftControllerY + rightControllerX); // Left Motor //
-            double rightMotorSpeed = -(leftControllerY - rightControllerX); // Right Motor //
-            // Tank Drive //
-            differentialDrive.tankDrive(leftMotorSpeed, rightMotorSpeed); // Send code to the motors with the Tank Drive method
-        }
+        /// Joystick Version /// 
+        // Calculations //
+        speedMultiplier = controller.isActionDown("Flip") ? speedMultiplier * -1 : speedMultiplier; // Flip drive 
+        creepMultiplier = controller.isActionDown("Creep") ? creepSpeed : baseSpeed; // Creep drive
+        // Controller //
+        double leftControllerY = controller.getAxis("Vertical") * creepMultiplier * speedMultiplier; // Y controller values
+        double rightControllerX = controller.getAxis("Horizontal") * creepMultiplier;  // X controller values 
+        // Motor Speed //
+        double leftMotorSpeed = (leftControllerY - rightControllerX); // Left Motor // -1 | 1
+        double rightMotorSpeed = (leftControllerY + rightControllerX); // Right Motor //
+        // Tank Drive //
+        differentialDrive.tankDrive(leftMotorSpeed, rightMotorSpeed); // Send code to the motors with the Tank Drive method
     }
 }
