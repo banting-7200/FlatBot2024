@@ -8,6 +8,9 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.PS4Controller;
 import edu.wpi.first.wpilibj.motorcontrol.PWMSparkMax;
+
+import edu.wpi.first.wpilibj.XboxController.Button;
+import edu.wpi.first.wpilibj.XboxController.Axis;
 // Credits //
 // @author: Nicholas Ranin
 // @editor: N/A
@@ -84,7 +87,7 @@ public final class Constants
     // Inputs //
     public static final Dictionary<Class<?>, Dictionary<String, String[]>> InputMaps = 
     new Hashtable<Class<?>, Dictionary<String, String[]>>() {{
-        put(XboxController.class, 
+        put(XboxController.class,
             new Hashtable<String, String[]>() {{
                 // Movement //
                 put("Horizontal", new String[] {"getRightX", "double"});
@@ -103,7 +106,7 @@ public final class Constants
                 // Movement //
                 put("Horizontal", new String[] {"getX", "double"});
                 put("Vertical", new String[] {"getY", "double"});
-                put("Flip", new String[] {"getRawButton", "boolean", "2"});
+                put("Flip", new String[] {"getRawButton", "boolean", "2", "3"});
                 put("Creep", new String[] {"getRawButton", "boolean", "3"});
                 // Actions //
                 put("Shoot", new String[] {"getTrigger", "boolean"});

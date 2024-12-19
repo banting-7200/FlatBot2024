@@ -10,24 +10,26 @@ package frc.robot.Movement;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 
 import edu.wpi.first.wpilibj.motorcontrol.PWMSparkMax;
-import frc.robot.Controller;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Input.Controller;
 
 import static frc.robot.Constants.DriveSettings.*;
 // Base Class //
-public class TankDrivePWM {
+public class TankDrivePWM extends SubsystemBase
+{
     // Properties //
     private DifferentialDrive differentialDrive;
     private final Controller controller = Controller.getController();
     // Motor Objects //
     private PWMSparkMax leftMotor, leftFollowerMotor, rightMotor, rightFollowerMotor;
-    // Initialize //
+    // Constructor / Initialize //
     /**
      * Call once to set up Tank Drive
      * 
      * Name: initialize
      * Frequency: Once
      */
-    public void initialize()
+    public TankDrivePWM()
     {
         // Initialize Motors //
         leftMotor = new PWMSparkMax(0);
@@ -46,9 +48,9 @@ public class TankDrivePWM {
      * Name: updateDrive
      * Frequency: Every-Frame
      */ 
-    public void updateDrive()
+    @Override
+    public void periodic()
     {
-        /// Joystick Version /// 
         // Calculations //
         speedMultiplier = controller.isActionDown("Flip") ? speedMultiplier * -1 : speedMultiplier; // Flip drive 
         creepMultiplier = controller.isActionDown("Creep") ? creepSpeed : baseSpeed; // Creep drive

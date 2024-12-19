@@ -4,14 +4,10 @@
 
 package frc.robot;
 
-import edu.wpi.first.math.VecBuilder;
-import edu.wpi.first.math.system.plant.DCMotor;
-import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.simulation.DifferentialDrivetrainSim;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import static frc.robot.Constants.MotorSettings.*;
 
 import frc.robot.Limbs.Arm;
@@ -40,6 +36,7 @@ public class Robot extends TimedRobot {
    */
   TankDriveCAN tankDriveCAN;
   TankDrivePWM tankDrivePWM;
+  Arm arm;
 
   @Override
   public void robotInit() {
@@ -48,16 +45,14 @@ public class Robot extends TimedRobot {
     if (isMotorTypePWM)
     {
       tankDrivePWM = new TankDrivePWM();
-      tankDrivePWM.initialize();
     }
     
     else
     {
      tankDriveCAN = new TankDriveCAN();
-     tankDriveCAN.initialize();
     }
 
-    Arm.initialize();
+    arm = new Arm();
   }
 
   /**
@@ -107,15 +102,7 @@ public class Robot extends TimedRobot {
 
   /** This function is called periodically during operator control. */
   @Override
-  public void teleopPeriodic() 
-  {
-    if (isMotorTypePWM)
-      tankDrivePWM.updateDrive();
-    else
-      tankDriveCAN.updateDrive();
-
-    Arm.update();
-  }
+  public void teleopPeriodic() {}
 
   /** This function is called once when the robot is disabled. */
   @Override
@@ -165,6 +152,5 @@ public class Robot extends TimedRobot {
   public void simulationPeriodic() 
   {
     m_driveSim.update(0.02);
-    tankDrivePWM.updateDrive();
   }
 }

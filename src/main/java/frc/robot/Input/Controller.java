@@ -1,5 +1,5 @@
 // Folder Address //
-package frc.robot;
+package frc.robot.Input;
 // Imports //
 import java.util.Enumeration;
 import java.util.Dictionary;
@@ -20,7 +20,7 @@ public class Controller
     public final Dictionary<Method, Integer> methodParameters = new Hashtable<Method, Integer>();
     // Private Data //
     private static Controller controllerObject;
-    private Object actualController;
+    private static Object actualController;
     // Constructors //
     private Controller(Class<?> controller)
     {
@@ -139,6 +139,11 @@ public class Controller
         controllerObject = new Controller(ControllerClass);
         // Return New Controller //
         return controllerObject;
+    }
+    
+    public Object getActualController()
+    {
+        return this.actualController;
     }
     /**
      * @param actionName

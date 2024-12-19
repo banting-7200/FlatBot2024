@@ -1,25 +1,24 @@
 // Address //
 package frc.robot.Limbs;
 // Imports //
-import static frc.robot.Constants.DriveSettings.isJoystick;
-
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.motorcontrol.PWMSparkMax;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Input.Controller;
 import edu.wpi.first.wpilibj.Joystick;
-import frc.robot.Controller;
 // Data //
 // Main Class //
-public final class Arm 
+public final class Arm extends SubsystemBase
 {
-    public static double inputAxis = 0;
+    public double inputAxis = 0;
     //initializes motors
-    public static PWMSparkMax mainBallLauncher = new PWMSparkMax(5);
-    public static PWMSparkMax followerBallLauncher = new PWMSparkMax(6);
-    public static PWMSparkMax articulateMotor = new PWMSparkMax(4);
+    public PWMSparkMax mainBallLauncher = new PWMSparkMax(5);
+    public PWMSparkMax followerBallLauncher = new PWMSparkMax(6);
+    public PWMSparkMax articulateMotor = new PWMSparkMax(4);
     // Input //
-    public static Controller controller;
+    public Controller controller;
     // Initialize Method //
-    public static void initialize()
+    public Arm()
     {
         mainBallLauncher.addFollower(followerBallLauncher);
         mainBallLauncher.setInverted(true);
@@ -28,23 +27,22 @@ public final class Arm
         controller = Controller.getController();
     }
     // Base Methods //
-    public static void updateArticulate()
+    public void updateArticulate()
     {
-        
         // Controls //
-        if (controller.getAxis("Articulate") == 1){ // UP
-            inputAxis = -0.1;
-        } else if(controller.getAxis("Articulate") == -1){ // DOWN
+        if (controller.getAxis("Articulate") > 0) // Up
             inputAxis = 0.35;
-        } else{
-            inputAxis = 0;
-        }
+        else if(controller.getAxis("Articulate") < 0) // DOWN
+            inputAxis = -0.1;
+        else
+            inputAxis = 0; // 
                
         // Update Motors //
         articulateMotor.set(inputAxis);
     }
     // Update Method //
-    public static void update()
+    @Override
+    public void periodic()
     {
         updateArticulate();
         // Conditions //
