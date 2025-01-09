@@ -2,15 +2,12 @@
 package frc.robot;
 // Imports //
 import java.util.Hashtable;
-
 import java.util.Dictionary;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.PS4Controller;
+import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.motorcontrol.PWMSparkMax;
-
-import edu.wpi.first.wpilibj.XboxController.Button;
-import edu.wpi.first.wpilibj.XboxController.Axis;
 // Credits //
 // @author: Nicholas Ranin
 // @editor: N/A
@@ -59,8 +56,6 @@ public final class Constants
      */
     public final class DriveSettings // SubClass of Constants //
     {
-        public static final boolean isJoystick = false; //determines robot's controller type
-
         public static final double baseSpeed = 0.7;
         public static final double creepSpeed = 0.5;
         
@@ -106,7 +101,7 @@ public final class Constants
                 // Movement //
                 put("Horizontal", new String[] {"getX", "double"});
                 put("Vertical", new String[] {"getY", "double"});
-                put("Flip", new String[] {"getRawButton", "boolean", "2", "3"});
+                put("Flip", new String[] {"getRawButton", "boolean", "2"});
                 put("Creep", new String[] {"getRawButton", "boolean", "3"});
                 // Actions //
                 put("Shoot", new String[] {"getTrigger", "boolean"});

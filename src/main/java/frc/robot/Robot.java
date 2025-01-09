@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.simulation.DifferentialDrivetrainSim;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
@@ -29,15 +30,21 @@ public class Robot extends TimedRobot {
   // Simulation Data //
   private DifferentialDrivetrainSim m_driveSim;
   private Field2d m_field = new Field2d();
+  // Private Data //
+  private TankDriveCAN tankDriveCAN;
+  private TankDrivePWM tankDrivePWM;
+  private Arm arm;
+  private static final DigitalInput creepSwitch = new DigitalInput(4);
   // Base Methods //
+  public static boolean isCreepOverriden()
+  {
+    return creepSwitch.get();
+  }
+
   /**
    * This function is run when the robot is first started up and should be used for any
    * initialization code.
-   */
-  TankDriveCAN tankDriveCAN;
-  TankDrivePWM tankDrivePWM;
-  Arm arm;
-
+   */ 
   @Override
   public void robotInit() {
     m_chooser.setDefaultOption("Default Auto", kDefaultAuto);

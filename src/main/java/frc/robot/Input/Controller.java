@@ -5,9 +5,12 @@ import java.util.Enumeration;
 import java.util.Dictionary;
 import java.util.Hashtable;
 
+import edu.wpi.first.wpilibj.GenericHID;
+
 import static frc.robot.Constants.ControllerClass;
 import static frc.robot.Constants.InputMaps;
 import java.lang.reflect.*;
+import java.math.BigInteger;
 // Base Class //
 public class Controller
 {
@@ -30,7 +33,7 @@ public class Controller
         try 
         {
             Constructor<?> constructor = controller.getConstructor(Integer.TYPE);
-            this.actualController = constructor.newInstance(0);
+            Controller.actualController = constructor.newInstance(0);
         }
 
         catch (Exception e)

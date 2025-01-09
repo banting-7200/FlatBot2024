@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Robot;
 import frc.robot.Input.Controller;
 
 import com.revrobotics.CANSparkMax;
@@ -70,6 +71,8 @@ public class TankDriveCAN extends SubsystemBase
         // Calculations //
         speedMultiplier = controller.isActionDown("Flip") ? speedMultiplier * -1 : speedMultiplier; // Flip drive 
         creepMultiplier = controller.isActionDown("Creep") ? creepSpeed : baseSpeed; // Creep drive
+        // Overrides //
+        creepMultiplier = Robot.isCreepOverriden() ? creepSpeed : creepMultiplier;
         // Controller //
         double leftControllerY = controller.getAxis("Vertical") * creepMultiplier * speedMultiplier; // Y controller values
         double rightControllerX = controller.getAxis("Horizontal") * creepMultiplier;  // X controller values 
